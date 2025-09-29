@@ -50,10 +50,7 @@ Users must be whitelisted to join. Their submitted random numbers remain encrypt
 ```bash
 # Clone the repository
 git clone https://github.com/zhenweisi/zama-whitelist-lottery.git
-cd zama-whitelist-lottery
-
-# Navigate to frontend directory (IMPORTANT!)
-cd packages/site
+cd zama-whitelist-lottery/packages/site
 
 # Install dependencies
 npm install
@@ -118,3 +115,11 @@ Privacy Guarantee: Even contract deployers cannot see player choices
 🛡️ Advanced Security: Add auditing and monitoring for smart contracts
 
 🤝 Community Features: Enable DAO-style governance for lottery rules
+
+📜 License
+This project is licensed under the MIT License. See LICENSE for details.
+
+👤 Author
+Liu Yang (刘洋)
+
+GitHub: zhenweisi
