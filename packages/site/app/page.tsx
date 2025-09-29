@@ -1,11 +1,11 @@
-import { FHECounterDemo } from "@/components/FHECounterDemo";
 
-export default function Home() {
+import FHECounterDemo from "../components/FHECounterDemo";
+
+export default function Page() {
   return (
-    <main className="">
-      <div className="flex flex-col gap-8 items-center sm:items-start w-full px-3 md:px-0">
-        <FHECounterDemo />
-      </div>
+    <main>
+      <h1>FHE Lottery DApp</h1>
+      <FHECounterDemo />
     </main>
   );
 }

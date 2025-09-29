@@ -4,43 +4,74 @@ pragma solidity ^0.8.24;
 import {FHE, euint32, externalEuint32} from "@fhevm/solidity/lib/FHE.sol";
 import {SepoliaConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 
-/// @title A simple FHE counter contract
-/// @author fhevm-hardhat-template
-/// @notice A very basic example contract showing how to work with encrypted data using FHEVM.
+interface IERC721 {
+    function balanceOf(address owner) external view returns (uint256);
+}
+
 contract FHECounter is SepoliaConfig {
-    euint32 private _count;
+    // 白名单 NFT 地址（Sepolia 示例，替换为你实际的）
+    address public constant WHITELIST_NFT = 0x1350674f9b185D6822B2D40e38d78E652D2AF23C;
 
-    /// @notice Returns the current count
-    /// @return The current encrypted count
-    function getCount() external view returns (euint32) {
-        return _count;
+    // 报名用户
+    address[] private participants;
+    mapping(address => bool) public hasEntered;
+
+    // 加密随机数
+    euint32 private _encryptedRand;
+
+    // 中奖者
+    address public winner;
+
+    // 事件
+    event Entered(address indexed user);
+    event RandomCommitted(address indexed committer);
+    event WinnerSet(address indexed winner);
+
+    modifier onlyWhitelisted() {
+        require(IERC721(WHITELIST_NFT).balanceOf(msg.sender) > 0, "Not whitelisted");
+        _;
     }
 
-    /// @notice Increments the counter by a specified encrypted value.
-    /// @param inputEuint32 the encrypted input value
-    /// @param inputProof the input proof
-    /// @dev This example omits overflow/underflow checks for simplicity and readability.
-    /// In a production contract, proper range checks should be implemented.
-    function increment(externalEuint32 inputEuint32, bytes calldata inputProof) external {
-        euint32 encryptedEuint32 = FHE.fromExternal(inputEuint32, inputProof);
-
-        _count = FHE.add(_count, encryptedEuint32);
-
-        FHE.allowThis(_count);
-        FHE.allow(_count, msg.sender);
+    /// 检查是否在白名单
+    function isWhitelisted(address user) external view returns (bool) {
+        return IERC721(WHITELIST_NFT).balanceOf(user) > 0;
     }
 
-    /// @notice Decrements the counter by a specified encrypted value.
-    /// @param inputEuint32 the encrypted input value
-    /// @param inputProof the input proof
-    /// @dev This example omits overflow/underflow checks for simplicity and readability.
-    /// In a production contract, proper range checks should be implemented.
-    function decrement(externalEuint32 inputEuint32, bytes calldata inputProof) external {
-        euint32 encryptedEuint32 = FHE.fromExternal(inputEuint32, inputProof);
+    /// 报名参加抽奖
+    function enterLottery() external onlyWhitelisted {
+        require(!hasEntered[msg.sender], "Already entered");
+        hasEntered[msg.sender] = true;
+        participants.push(msg.sender);
+        emit Entered(msg.sender);
+    }
 
-        _count = FHE.sub(_count, encryptedEuint32);
+    /// 提交加密随机数（前端用 SDK encrypt32 生成）
+    function commitRandom(externalEuint32 input, bytes calldata proof) external {
+        _encryptedRand = FHE.fromExternal(input, proof);
+        FHE.allowThis(_encryptedRand);
+        FHE.allow(_encryptedRand, msg.sender);
+        emit RandomCommitted(msg.sender);
+    }
 
-        FHE.allowThis(_count);
-        FHE.allow(_count, msg.sender);
+    /// 返回加密随机数（前端/relayer 解密用）
+    function getEncryptedRand() external view returns (euint32) {
+        return _encryptedRand;
+    }
+
+    /// 设置中奖者（前端/relayer 解密后调用）
+    function setWinner(address _winner) external onlyWhitelisted {
+        require(winner == address(0), "Winner already set");
+        winner = _winner;
+        emit WinnerSet(_winner);
+    }
+
+    /// 查询中奖者
+    function getWinner() external view returns (address) {
+        return winner;
+    }
+
+    /// 查询所有参与者
+    function getParticipants() external view returns (address[] memory) {
+        return participants;
     }
 }
