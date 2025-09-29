@@ -61,14 +61,15 @@ The app will run at http://localhost:3000
 
 ⚠️ Note: You must run npm run dev inside packages/site, otherwise the project will not start.
 
-#⚡ Runtime Modes
+
+##⚡ Runtime Modes
 The frontend automatically switches between modes:
 
 On-chain Mode (default): If Sepolia RPC is available, the app connects to the blockchain.
 
 Mock Mode (automatic fallback): If RPC is unavailable, the app automatically falls back to mock data. This ensures the UI is always runnable, even without RPC or wallet setup.
 
-##🎮 Game Flow
+## 🎮 Game Flow
 Whitelist Check: Verify if the user’s wallet is whitelisted (via NFT ownership)
 
 Submit Random Number: Encrypted with FHE and stored on-chain
@@ -77,7 +78,7 @@ Wait for Reveal: Once all players submit or time expires, numbers are decrypted
 
 Winner Selection: The unique random number wins the prize pool
 
-##📝 Whitelist Mechanism
+## 📝 Whitelist Mechanism
 Whitelist verification is based on NFT ownership. Only wallets holding the designated NFT are eligible to participate.
 
 Whitelist Contract: Deployed on Sepolia Testnet
@@ -103,24 +104,24 @@ On-chain Computation: Winner determined using FHE without revealing inputs
 
 Privacy Guarantee: Even contract deployers cannot see player choices
 
-##🔮 Next Steps / Future Work
+## 🔮 Next Steps / Future Work
 
-#🎁 NFT Rewards: Distribute special NFTs to winners as proof of victory
+🎁 NFT Rewards: Distribute special NFTs to winners as proof of victory
 
-#🔄 Multi-round Lotteries: Support multiple rounds and progressive jackpots
+🔄 Multi-round Lotteries: Support multiple rounds and progressive jackpots
 
-#🌐 Mainnet Deployment: Deploy on Ethereum mainnet or other L2 networks
+🌐 Mainnet Deployment: Deploy on Ethereum mainnet or other L2 networks
 
-#📱 Mobile Optimization: Improve UI/UX for mobile devices
+📱 Mobile Optimization: Improve UI/UX for mobile devices
 
-#🛡️ Advanced Security: Add auditing and monitoring for smart contracts
+🛡️ Advanced Security: Add auditing and monitoring for smart contracts
 
-#🤝 Community Features: Enable DAO-style governance for lottery rules
+🤝 Community Features: Enable DAO-style governance for lottery rules
 
-##📜 License
+## 📜 License
 This project is licensed under the MIT License. See LICENSE for details.
 
-##👤 Author
+## 👤 Author
 Liu Yang (刘洋)
 
 GitHub: zhenweisi
