@@ -62,7 +62,7 @@ The app will run at http://localhost:3000
 ⚠️ Note: You must run npm run dev inside packages/site, otherwise the project will not start.
 
 
-##⚡ Runtime Modes
+## ⚡ Runtime Modes## 
 The frontend automatically switches between modes:
 
 On-chain Mode (default): If Sepolia RPC is available, the app connects to the blockchain.
