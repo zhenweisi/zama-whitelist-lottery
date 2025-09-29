@@ -5,13 +5,25 @@ Only users who pass whitelist verification can participate. All submitted random
 
 ---
 
+## ✨ Features
+
+- 🔐 **Privacy by Design**: Random numbers encrypted with Zama FHE  
+- ✅ **Whitelist Verification**: Only wallets holding a specific NFT can participate  
+- 🏆 **Fair Lottery**: Results are computed on-chain and verifiable  
+- 💰 **Prize Pool**: Entry fees are pooled and awarded to the winner  
+- 📊 **Leaderboard**: Tracks winners and rewards  
+- 🎨 **Modern UI**: Built with React + Tailwind + shadcn/ui  
+- 🔗 **Web3 Native**: Integrated with MetaMask / RainbowKit  
+
+---
+
 ## ⚡ Runtime Modes
 
 The frontend **automatically switches between modes**:
 
 - **On-chain Mode** (default): If Sepolia RPC is available, the app connects to the blockchain.  
 - **Mock Mode** (automatic fallback): If RPC is unavailable, the app automatically falls back to mock data.  
-  This ensures the UI is always runnable, even without RPC or wallet setup.  
+  → Ensures the UI is always runnable, even without RPC or wallet setup.  
 
 ---
 
@@ -39,42 +51,37 @@ Example snippet:
 function isWhitelisted(address user) public view returns (bool) {
     return IERC721(whitelistNFT).balanceOf(user) > 0;
 }
-# 🔐 Zama FHE Integration
-Client-side Encryption: Numbers encrypted before submission
+```
+## 🔐 Zama FHE Integration
 
-On-chain Storage: Encrypted values stored as euint32
+- **Client-side Encryption**: Numbers encrypted before submission  
+- **On-chain Storage**: Encrypted values stored as `euint32`  
+- **On-chain Computation**: Winner determined using FHE without revealing inputs  
+- **Privacy Guarantee**: Even contract deployers cannot see player choices  
 
-On-chain Computation: Winner determined using FHE without revealing inputs
+---
 
-Privacy Guarantee: Even contract deployers cannot see player choices
-# 🔮Next Steps / Future Work
-🎁 NFT Rewards: Distribute special NFTs to winners as proof of victory
+## 🔮 Next Steps / Future Work
 
-🔄 Multi-round Lotteries: Support multiple rounds and progressive jackpots
+- 🎁 **NFT Rewards**: Distribute special NFTs to winners as proof of victory  
+- 🔄 **Multi-round Lotteries**: Support multiple rounds and progressive jackpots  
+- 🌐 **Mainnet Deployment**: Deploy on Ethereum mainnet or other L2 networks  
+- 📱 **Mobile Optimization**: Improve UI/UX for mobile devices  
+- 🛡️ **Advanced Security**: Add auditing and monitoring for smart contracts  
+- 🤝 **Community Features**: Enable DAO-style governance for lottery rules  
 
-🌐 Mainnet Deployment: Deploy on Ethereum mainnet or other L2 networks
+---
 
-📱 Mobile Optimization: Improve UI/UX for mobile devices
+## 🚀 Installation & Run
 
-🛡️ Advanced Security: Add auditing and monitoring for smart contracts
+### Prerequisites
+- Node.js 18+  
+- npm  
+- MetaMask or compatible wallet  
+- Sepolia ETH for gas fees  
 
-🤝 Community Features: Enable DAO-style governance for lottery rules
-# 📜 License
-This project is licensed under the MIT License. See LICENSE for details.
-# 👤 Author
-    Liu Yang (刘洋)
-
-    GitHub: zhenweisi
-#  🚀 Installation & Run
-Prerequisites
-Node.js 18+
-
-npm
-
-MetaMask or compatible wallet
-
-Sepolia ETH for gas fees
-Steps
+### Steps
+```bash
 # Clone the repository
 git clone https://github.com/zhenweisi/zama-whitelist-lottery.git
 cd zama-whitelist-lottery/packages/site
