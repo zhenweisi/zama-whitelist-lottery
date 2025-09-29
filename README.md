@@ -1,134 +1,135 @@
-# FHEVM React Template
+# 🎟️ Zama Whitelist Lottery
 
-The FHEVM React Template is an ultra-minimal React project for building and running an FHEVM-enabled dApp.
-It works alongside the [fhevm-hardhat-template](https://github.com/zama-ai/fhevm-hardhat-template)
-and provides a simple development frontend for interacting with the `FHECounter.sol` contract.
+A **privacy-preserving on-chain lottery dApp** powered by **Zama Fully Homomorphic Encryption (FHE)**.  
+Only users who pass whitelist verification can participate. All submitted random numbers remain encrypted on-chain until the lottery ends, ensuring fairness and privacy.
 
-This template also illustrates how to run your FHEVM-dApp on both Sepolia as well as a local Hardhat Node (much faster).
+---
 
-## Features
+## 🎯 Project Overview
 
-- **@zama-fhe/relayer-sdk**: Fully Homomorphic Encryption for Ethereum Virtual Machine
-- **React**: Modern UI framework for building interactive interfaces
-- **Next.js**: Next-generation frontend build tool
-- **Tailwind**: Utility-first CSS framework for rapid UI development
+**Zama Whitelist Lottery** is a decentralized lottery dApp that combines **whitelist access control** with **FHE-based privacy**.  
+Users must be whitelisted to join. Their submitted random numbers remain encrypted until the reveal phase, guaranteeing transparent and tamper-proof results.
 
-## Requirements
+---
 
-- You need to have Metamask browser extension installed on your browser.
+## ✨ Features
 
-## Local Hardhat Network (to add in MetaMask)
+- 🔐 **Privacy by Design**: Random numbers encrypted with Zama FHE  
+- ✅ **Whitelist Verification**: Only wallets holding a specific NFT can participate  
+- 🏆 **Fair Lottery**: Results are computed on-chain and verifiable  
+- 💰 **Prize Pool**: Entry fees are pooled and awarded to the winner  
+- 📊 **Leaderboard**: Tracks winners and rewards  
+- 🎨 **Modern UI**: Built with React + Tailwind + shadcn/ui  
+- 🔗 **Web3 Native**: Integrated with MetaMask / RainbowKit  
 
-Follow the step-by-step guide in the [Hardhat + MetaMask](https://docs.metamask.io/wallet/how-to/run-devnet/) documentation to set up your local devnet using Hardhat and MetaMask.
+---
 
-- Name: Hardhat
-- RPC URL: http://127.0.0.1:8545
-- Chain ID: 31337
-- Currency symbol: ETH
+## 🔧 Tech Stack
 
-## Install
+**Frontend**
+- React 18 + TypeScript + Vite  
+- Tailwind CSS + shadcn/ui  
+- Wagmi v2 + RainbowKit  
 
-1. Clone this repository.
-2. From the repo root, run:
+**Blockchain & Privacy**
+- Solidity + Hardhat  
+- Zama FHEVM SDK  
+- Sepolia Testnet  
 
-```sh
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+  
+- npm  
+- MetaMask or compatible wallet  
+- Sepolia ETH for gas fees  
+
+### Installation & Run
+```bash
+# Clone the repository
+git clone https://github.com/zhenweisi/zama-whitelist-lottery.git
+cd zama-whitelist-lottery
+
+# Navigate to frontend directory (IMPORTANT!)
+cd packages/site
+
+# Install dependencies
 npm install
-```
 
-## Quickstart
+# Start development server
+npm run dev
+The app will run at http://localhost:3000
 
-1. Setup your hardhat environment variables:
+⚠️ Note: You must run npm run dev inside packages/site, otherwise the project will not start.
 
-Follow the detailed instructions in the [FHEVM documentation](https://docs.zama.ai/protocol/solidity-guides/getting-started/setup#set-up-the-hardhat-configuration-variables-optional) to setup `MNEMONIC` + `INFURA_API_KEY` Hardhat environment variables
+⚡ Runtime Modes
+The frontend automatically switches between modes:
 
-2. Start a local Hardhat node (new terminal):
+On-chain Mode (default): If Sepolia RPC is available, the app connects to the blockchain.
 
-```sh
-# Default RPC: http://127.0.0.1:8545  | chainId: 31337
-npm run hardhat-node
-```
+Mock Mode (automatic fallback): If RPC is unavailable, the app automatically falls back to mock data. This ensures the UI is always runnable, even without RPC or wallet setup.
 
-3. Launch the frontend in mock mode:
+🎮 Game Flow
+Whitelist Check: Verify if the user’s wallet is whitelisted (via NFT ownership)
 
-```sh
-npm run dev:mock
-```
+Submit Random Number: Encrypted with FHE and stored on-chain
 
-4. Start your browser with the Metamask extension installed and open http://localhost:3000
+Wait for Reveal: Once all players submit or time expires, numbers are decrypted
 
-5. Open the Metamask extension to connect to the local Hardhat node
-   i. Select Add network.
-   ii. Select Add a network manually.
-   iii. Enter your Hardhat Network RPC URL, http://127.0.0.1:8545 (or http://localhost:8545).
-   iv. Enter your Hardhat Network chain ID, 31337 (or 0x539 in hexadecimal format).
+Winner Selection: The unique random number wins the prize pool
 
-## Run on Sepolia
+📝 Whitelist Mechanism
+Whitelist verification is based on NFT ownership. Only wallets holding the designated NFT are eligible to participate.
 
-1. Deploy your contract on Sepolia Testnet
+Whitelist Contract: Deployed on Sepolia Testnet
 
-```sh
-npm run deploy:sepolia
-```
+Logic: Frontend queries the contract to check NFT ownership
 
-2. In your browser open `http://localhost:3000`
+Contract Interface: isWhitelisted(address user) → bool
 
-3. Open the Metamask extension to connect to the Sepolia network
+Security: Verification is fully on-chain and cannot be bypassed
 
-## How to fix Hardhat Node + Metamask Errors ?
+Example snippet:
 
-When using MetaMask as a wallet provider with a development node like Hardhat, you may encounter two common types of errors:
+solidity
+function isWhitelisted(address user) public view returns (bool) {
+    return IERC721(whitelistNFT).balanceOf(user) > 0;
+}
 
-### 1. ⚠️ Nonce Mismatch ❌💥
+🔐 Zama FHE Integration
+Client-side Encryption: Numbers encrypted before submission
 
-MetaMask tracks wallet nonces (the number of transactions sent from a wallet). However, if you restart your Hardhat node, the nonce is reset on the dev node, but MetaMask does not update its internal nonce tracking. This discrepancy causes a nonce mismatch error.
+On-chain Storage: Encrypted values stored as euint32
 
-### 2. ⚠️ View Function Call Result Mismatch ❌💥
+On-chain Computation: Winner determined using FHE without revealing inputs
 
-MetaMask caches the results of view function calls. If you restart your Hardhat node, MetaMask may return outdated cached data corresponding to a previous instance of the node, leading to incorrect results.
+Privacy Guarantee: Even contract deployers cannot see player choices
 
-### ✅ How to Fix Nonce Mismatch:
+🔮 Next Steps / Future Work
+🎁 NFT Rewards: Distribute special NFTs to winners as proof of victory
 
-To fix the nonce mismatch error, simply clear the MetaMask cache:
+🔄 Multi-round Lotteries: Support multiple rounds and progressive jackpots
 
-1. Open the MetaMask browser extension.
-2. Select the Hardhat network.
-3. Go to Settings > Advanced.
-4. Click the "Clear Activity Tab" red button to reset the nonce tracking.
+🌐 Mainnet Deployment: Deploy on Ethereum mainnet or other L2 networks
 
-The correct way to do this is also explained [here](https://docs.metamask.io/wallet/how-to/run-devnet/).
+📱 Mobile Optimization: Improve UI/UX for mobile devices
 
-### ✅ How to Fix View Function Return Value Mismatch:
+🛡️ Advanced Security: Add auditing and monitoring for smart contracts
 
-To fix the view function result mismatch:
+🤝 Community Features: Enable DAO-style governance for lottery rules
 
-1. Restart the entire browser. MetaMask stores its cache in the extension's memory, which cannot be cleared by simply clearing the browser cache or using MetaMask's built-in cache cleaning options.
+---
 
-By following these steps, you can ensure that MetaMask syncs correctly with your Hardhat node and avoid potential issues related to nonces and cached view function results.
+## 📜 License
 
-## Project Structure Overview
+This project is licensed under the **MIT License**.  
+See [LICENSE](./LICENSE) for details.
 
-### Key Files/Folders
+---
 
-- **`<root>/packages/site/fhevm`**: This folder contains the essential hooks needed to interact with FHEVM-enabled smart contracts. It is meant to be easily copied and integrated into any FHEVM + React project.
+## 👤 Author
 
-- **`<root>/packages/site/hooks/useFHECounter.tsx`**: A simple React custom hook that demonstrates how to use the `useFhevm` hook in a basic use case, serving as an example of integration.
-
-### Secondary Files/Folders
-
-- **`<root>/packages/site/hooks/metamask`**: This folder includes hooks designed to manage the MetaMask Wallet provider. These hooks can be easily adapted or replaced to support other wallet providers, following the EIP-6963 standard,
-- Additionally, the project is designed to be flexible, allowing developers to easily replace `ethers.js` with a more React-friendly library of their choice, such as `Wagmi`.
-
-## Documentation
-
-- [Hardhat + MetaMask](https://docs.metamask.io/wallet/how-to/run-devnet/): Set up your local devnet step by step using Hardhat and MetaMask.
-- [FHEVM Documentation](https://docs.zama.ai/protocol/solidity-guides/)
-- [FHEVM Hardhat](https://docs.zama.ai/protocol/solidity-guides/development-guide/hardhat)
-- [@zama-fhe/relayer-sdk Documentation](https://docs.zama.ai/protocol/relayer-sdk-guides/)
-- [Setting up MNEMONIC and INFURA_API_KEY](https://docs.zama.ai/protocol/solidity-guides/getting-started/setup#set-up-the-hardhat-configuration-variables-optional)
-- [React Documentation](https://reactjs.org/)
-- [FHEVM Discord Community](https://discord.com/invite/zama)
-- [GitHub Issues](https://github.com/zama-ai/fhevm-react-template/issues)
-
-## License
-
-This project is licensed under the BSD-3-Clause-Clear License - see the LICENSE file for details.
+- **Liu Yang (刘洋)**  
+- GitHub: [zhenweisi](https://github.com/zhenweisi)
